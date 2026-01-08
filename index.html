@@ -1,113 +1,695 @@
-from IPython.display import HTML, display
-
-html_code = """
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Hotel alle Cinque Terre – Guida indipendente</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  margin: 0;
-  color: #1f2937;
-  background: #ffffff;
-  line-height: 1.6;
-}
-header {
-  padding: 60px 20px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e5e7eb;
-}
-header h1 {
-  max-width: 900px;
-  margin: auto;
-  font-size: 2.4rem;
-}
-header p {
-  max-width: 900px;
-  margin: 20px auto 0;
-  font-size: 1.1rem;
-  color: #4b5563;
-}
-main {
-  max-width: 1100px;
-  margin: auto;
-  padding: 40px 20px;
-}
-section {
-  margin-bottom: 60px;
-}
-h2 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-}
-.card {
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 20px;
-  background: #ffffff;
-}
-.muted {
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-footer {
-  background: #f1f5f9;
-  padding: 40px 20px;
-  font-size: 0.9rem;
-  color: #475569;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hotel alle Cinque Terre – Guida indipendente</title>
+  <meta name="description" content="Guida indipendente agli hotel delle Cinque Terre: borghi, criteri di scelta, mini-mappa e strutture selezionate (max 5–10) con schede chiare." />
+
+  <meta property="og:title" content="Hotel alle Cinque Terre – Guida indipendente" />
+  <meta property="og:description" content="Borghi, criteri, mini-mappa e selezione ragionata di hotel (max 5–10)." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --paper:#ffffff;
+      --soft:#f8fafc;
+      --line:#e5e7eb;
+      --text:#0f172a;
+      --muted:#64748b;
+      --accent:#2563eb;
+      --accent2:#22c55e;
+      --shadow: 0 14px 40px rgba(2,6,23,.10);
+      --radius: 20px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:linear-gradient(180deg,#f8fafc 0%, #ffffff 40%);
+      line-height:1.6;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1140px;margin:0 auto;padding:0 20px}
+
+    /* NAV */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:saturate(180%) blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0; gap:14px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.2px}
+    .brand-badge{
+      width:36px;height:36px;border-radius:14px;
+      background:linear-gradient(135deg,var(--accent),#60a5fa);
+      box-shadow: 0 10px 24px rgba(37,99,235,.18);
+      display:grid;place-items:center;
+      color:#fff; font-weight:1000; font-size:14px;
+    }
+    .nav-links{display:flex; gap:14px; flex-wrap:wrap; font-weight:800}
+    .nav-links a{color:#334155}
+    .nav-links a:hover{color:var(--accent); text-decoration:none}
+
+    /* HERO */
+    .hero{padding:18px 0 30px}
+    .hero-wrap{
+      border:1px solid var(--line);
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background:#0b1220;
+      position:relative;
+    }
+    .hero-bg{
+      position:absolute; inset:0;
+      background:
+        linear-gradient(90deg, rgba(2,6,23,.78) 0%, rgba(2,6,23,.40) 55%, rgba(2,6,23,.62) 100%),
+        url("https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=2400&q=70") center/cover no-repeat;
+      filter:saturate(1.05) contrast(1.05);
+      transform:scale(1.02);
+    }
+    .hero-inner{
+      position:relative;
+      padding:42px 22px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .kicker{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; font-weight:900; letter-spacing:.3px;
+      color:#e2e8f0;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      padding:8px 12px;
+      border-radius:999px;
+    }
+    .h1{
+      margin:14px 0 10px;
+      font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+      line-height:1.06;
+      letter-spacing:-.7px;
+      color:#fff;
+    }
+    .lead{margin:0;color:#e5e7eb; font-size:1.06rem; max-width:62ch}
+    .cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      font-weight:900;
+      color:#fff;
+    }
+    .btn.primary{
+      border-color:rgba(34,197,94,.26);
+      background:linear-gradient(135deg,var(--accent2),#16a34a);
+      box-shadow: 0 14px 28px rgba(34,197,94,.16);
+    }
+    .btn:hover{text-decoration:none; filter:brightness(1.05)}
+    .hero-aside{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:16px;
+      color:#e5e7eb;
+    }
+    .aside-title{margin:0 0 10px; font-weight:1000; color:#fff}
+    .aside-list{margin:0; padding-left:18px}
+    .aside-list li{margin:6px 0}
+    .pill-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+    .pill{
+      font-size:12px; font-weight:900;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    /* SECTIONS */
+    section{padding:28px 0}
+    .section-title{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+      margin-bottom:14px;
+    }
+    h2{margin:0; font-size:1.65rem; letter-spacing:-.3px}
+    .sub{margin:0; color:var(--muted); max-width:72ch}
+
+    .grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:16px}
+    .card{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: 0 8px 24px rgba(2,6,23,.06);
+    }
+    .card:hover{border-color:#cbd5e1}
+    .card-top{display:flex; gap:12px; align-items:flex-start; margin-bottom:10px}
+    .icon{
+      width:42px;height:42px;border-radius:16px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, rgba(37,99,235,.14), rgba(34,197,94,.12));
+      border:1px solid rgba(15,23,42,.08);
+      flex:0 0 auto;
+    }
+    .card h3{margin:0; font-size:1.08rem}
+    .meta{margin:2px 0 0; color:var(--muted); font-size:.95rem}
+    .tagline{margin:10px 0 0; color:#334155}
+
+    /* HOTEL cards */
+    .hotel-cover{
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(2,6,23,.08);
+      background:#0b1220;
+      height:150px;
+      position:relative;
+    }
+    .hotel-cover img{
+      width:100%; height:100%; object-fit:cover;
+      filter:saturate(1.03) contrast(1.03);
+      display:block;
+    }
+    .hotel-cover:after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(2,6,23,.08) 0%, rgba(2,6,23,.62) 92%);
+    }
+    .badge-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .badge{
+      font-size:12px; font-weight:900;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(2,6,23,.04);
+      border:1px solid rgba(2,6,23,.08);
+      color:#0f172a;
+    }
+    .links{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px}
+    .links a{font-weight:1000}
+
+    /* Mini map */
+    .map-wrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    .map-card{
+      background:linear-gradient(180deg,#ffffff 0%, #f8fafc 100%);
+    }
+    .map-note{margin:0; color:var(--muted)}
+    .map-svg{
+      width:100%;
+      height:auto;
+      border-radius:16px;
+      border:1px solid rgba(2,6,23,.08);
+      background:#fff;
+    }
+    .map-legend{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:10px;
+      color:#334155;
+      font-weight:900;
+      font-size:12px;
+    }
+    .dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
+    .d1{background:#2563eb}
+    .d2{background:#0ea5e9}
+    .d3{background:#22c55e}
+    .d4{background:#f59e0b}
+    .d5{background:#ef4444}
+
+    /* FAQ */
+    details{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:14px 16px;
+      background:#fff;
+    }
+    details + details{margin-top:12px}
+    summary{cursor:pointer; font-weight:1000}
+    details p{margin:10px 0 0; color:#334155}
+
+    /* Footer */
+    footer{
+      margin-top:30px;
+      border-top:1px solid var(--line);
+      background:var(--soft);
+      padding:26px 0;
+      color:#475569;
+      font-size:.92rem;
+    }
+
+    @media (max-width: 900px){
+      .hero-inner{grid-template-columns: 1fr; padding:28px 16px}
+    }
+  </style>
+
+  <!-- JSON-LD (credibilità, struttura) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Guida Hotel Cinque Terre",
+    "description":"Guida indipendente agli hotel delle Cinque Terre: borghi, criteri, mini-mappa e schede.",
+    "inLanguage":"it-IT"
+  }
+  </script>
 </head>
+
 <body>
 
-<header>
-<h1>Dove dormire alle Cinque Terre</h1>
-<p>Guida indipendente agli hotel delle Cinque Terre: borghi, consigli e strutture selezionate.</p>
-</header>
+  <div class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="brand-badge">5T</div>
+        <div>Guida Hotel Cinque Terre</div>
+      </div>
+      <nav class="nav-links" aria-label="Navigazione">
+        <a href="#mappa">Mini-mappa</a>
+        <a href="#borghi">Borghi</a>
+        <a href="#criteri">Criteri</a>
+        <a href="#hotel">Hotel</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </div>
 
-<main>
+  <header class="hero">
+    <div class="container">
+      <div class="hero-wrap">
+        <div class="hero-bg" aria-hidden="true"></div>
 
-<section>
-<h2>I borghi delle Cinque Terre</h2>
-<div class="grid">
-<div class="card"><strong>Monterosso</strong><p class="muted">Spiagge e hotel più grandi</p></div>
-<div class="card"><strong>Vernazza</strong><p class="muted">Romantica e panoramica</p></div>
-<div class="card"><strong>Corniglia</strong><p class="muted">Tranquilla e meno affollata</p></div>
-<div class="card"><strong>Manarola</strong><p class="muted">Iconica e fotografata</p></div>
-<div class="card"><strong>Riomaggiore</strong><p class="muted">Vivace e autentica</p></div>
-</div>
-</section>
+        <div class="hero-inner">
+          <div>
+            <span class="kicker">Guida indipendente • selezione max 5–10 • aggiornata periodicamente</span>
+            <h1 class="h1">Hotel alle Cinque Terre: dove dormire davvero bene</h1>
+            <p class="lead">
+              In 5 minuti capisci le differenze tra i borghi, cosa cambia per mare, vista, quiete e logistica.
+              Poi trovi una selezione ragionata di strutture con schede chiare.
+            </p>
+            <div class="cta-row">
+              <a class="btn primary" href="#hotel">Vai agli hotel</a>
+              <a class="btn" href="#criteri">Vedi i criteri</a>
+            </div>
+          </div>
 
-<section>
-<h2>Hotel selezionati</h2>
-<div class="grid">
-<div class="card">
-<strong>Hotel esempio Monterosso</strong>
-<p>Ideale per soggiorni rilassanti vicino al mare.</p>
-</div>
-<div class="card">
-<strong>Hotel esempio Vernazza</strong>
-<p>Perfetto per coppie e viaggi romantici.</p>
-</div>
-</div>
-</section>
+          <aside class="hero-aside">
+            <p class="aside-title">Scelta rapida</p>
+            <ul class="aside-list">
+              <li><strong>Monterosso</strong>: spiaggia + servizi.</li>
+              <li><strong>Vernazza</strong>: romanticismo + vista.</li>
+              <li><strong>Corniglia</strong>: quiete + meno folla.</li>
+              <li><strong>Manarola</strong>: “cartolina” + treno comodo.</li>
+              <li><strong>Riomaggiore</strong>: vivace + base pratica.</li>
+            </ul>
+            <div class="pill-row">
+              <span class="pill">Coppie</span>
+              <span class="pill">Famiglie</span>
+              <span class="pill">Vista mare</span>
+              <span class="pill">Senza auto</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </header>
 
-</main>
+  <main class="container">
 
-<footer>
-<p>Sito informativo indipendente.</p>
-</footer>
+    <!-- MINI MAPPA -->
+    <section id="mappa">
+      <div class="section-title">
+        <h2>Mini-mappa orientativa</h2>
+        <p class="sub">Non sostituisce una mappa reale: serve per capire “chi sta dove” e scegliere più velocemente.</p>
+      </div>
+
+      <div class="card map-card">
+        <div class="map-wrap">
+          <!-- SVG mini-map -->
+          <svg class="map-svg" viewBox="0 0 980 320" role="img" aria-label="Mini mappa Cinque Terre">
+            <defs>
+              <linearGradient id="sea" x1="0" x2="1">
+                <stop offset="0" stop-color="#e0f2fe"/>
+                <stop offset="1" stop-color="#dbeafe"/>
+              </linearGradient>
+              <linearGradient id="land" x1="0" x2="1">
+                <stop offset="0" stop-color="#ecfccb"/>
+                <stop offset="1" stop-color="#dcfce7"/>
+              </linearGradient>
+              <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#0b1220" flood-opacity="0.12"/>
+              </filter>
+            </defs>
+
+            <!-- Sea -->
+            <rect x="0" y="0" width="980" height="320" fill="url(#sea)"/>
+
+            <!-- Coastline stylized -->
+            <path d="M0,220 C120,170 180,150 260,155 C360,160 430,110 520,115 C610,120 650,95 740,110 C820,124 900,115 980,90 L980,320 L0,320 Z"
+                  fill="url(#land)"/>
+
+            <!-- Railway line -->
+            <path d="M110,190 C210,175 260,180 330,170 C420,158 490,140 560,142 C650,145 720,135 820,115"
+                  stroke="#0f172a" stroke-opacity="0.20" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M110,190 C210,175 260,180 330,170 C420,158 490,140 560,142 C650,145 720,135 820,115"
+                  stroke="#0f172a" stroke-opacity="0.35" stroke-dasharray="6 10" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+            <!-- Town dots + labels -->
+            <g filter="url(#s)">
+              <circle cx="110" cy="190" r="10" fill="#2563eb"/><!-- Monterosso -->
+              <circle cx="330" cy="170" r="10" fill="#0ea5e9"/><!-- Vernazza -->
+              <circle cx="470" cy="150" r="10" fill="#22c55e"/><!-- Corniglia -->
+              <circle cx="610" cy="145" r="10" fill="#f59e0b"/><!-- Manarola -->
+              <circle cx="820" cy="115" r="10" fill="#ef4444"/><!-- Riomaggiore -->
+            </g>
+
+            <g font-family="ui-sans-serif, system-ui" font-weight="800" font-size="16" fill="#0f172a">
+              <text x="110" y="220" text-anchor="middle">Monterosso</text>
+              <text x="330" y="200" text-anchor="middle">Vernazza</text>
+              <text x="470" y="180" text-anchor="middle">Corniglia</text>
+              <text x="610" y="175" text-anchor="middle">Manarola</text>
+              <text x="820" y="145" text-anchor="middle">Riomaggiore</text>
+            </g>
+
+            <text x="24" y="40" font-size="18" font-weight="900" fill="#0f172a">Mar Ligure</text>
+            <text x="24" y="66" font-size="13" font-weight="800" fill="#334155">schema orientativo</text>
+          </svg>
+
+          <p class="map-note">
+            Suggerimento pratico: se vuoi “meno complicazioni”, spesso <strong>Monterosso</strong> e <strong>Riomaggiore</strong>
+            sono più semplici per arrivo/spostamenti; se vuoi “wow + vista”, punta su <strong>Vernazza</strong> o <strong>Manarola</strong>.
+          </p>
+
+          <div class="map-legend" aria-label="Legenda">
+            <span><i class="dot d1"></i>Monterosso</span>
+            <span><i class="dot d2"></i>Vernazza</span>
+            <span><i class="dot d3"></i>Corniglia</span>
+            <span><i class="dot d4"></i>Manarola</span>
+            <span><i class="dot d5"></i>Riomaggiore</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BORGHI -->
+    <section id="borghi">
+      <div class="section-title">
+        <h2>I borghi: cosa cambia davvero</h2>
+        <p class="sub">Prima scegli il borgo, poi la struttura. È la scelta che fa la differenza.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-top">
+            <div class="icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M3 19c4-2 7-2 10 0s6 2 8 0" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                <path d="M7 18V8m0 0c2-1 4-1 6 0m-6 0c-1-2 0-4 2-5" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Monterosso</h3>
+              <p class="meta">Spiaggia + servizi + più scelta</p>
+            </div>
+          </div>
+          <p class="tagline">Buona per famiglie o per chi vuole mare e logistica semplice.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <div class="icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21s-7-4.6-9.2-9.2C1.1 8.3 3.2 5 6.7 5c1.9 0 3.2 1 4.1 2.2C11.7 6 13 5 14.9 5c3.5 0 5.6 3.3 3.9 6.8C19 16.4 12 21 12 21z" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Vernazza</h3>
+              <p class="meta">Romantica + scenografica</p>
+            </div>
+          </div>
+          <p class="tagline">Perfetta per coppie. Valuta accessibilità e bagagli in alta stagione.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <div class="icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M3 19l7-9 5 6 3-4 3 7H3z" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Corniglia</h3>
+              <p class="meta">Quiete + meno folla</p>
+            </div>
+          </div>
+          <p class="tagline">Ottima se vuoi tranquillità. Considera scale/pendenze e tempi a piedi.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <div class="icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M4 7h16v10H4V7z" stroke="#0f172a" stroke-width="2" />
+                <path d="M8 11h4" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Manarola</h3>
+              <p class="meta">Iconica + base comoda</p>
+            </div>
+          </div>
+          <p class="tagline">Ideale per 1–2 notti e per muoversi spesso in treno.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <div class="icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M7 3h10a2 2 0 0 1 2 2v10a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2z" stroke="#0f172a" stroke-width="2"/>
+                <path d="M8 18l-2 3m12-3l2 3" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 7h8" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Riomaggiore</h3>
+              <p class="meta">Vivace + pratico</p>
+            </div>
+          </div>
+          <p class="tagline">Spesso ottimo compromesso: comoda come base e con atmosfera serale.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CRITERI -->
+    <section id="criteri">
+      <div class="section-title">
+        <h2>Criteri di selezione</h2>
+        <p class="sub">Questa sezione aumenta la fiducia: spiega come e perché una struttura entra nella lista.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>1) Chiarezza e trasparenza</h3>
+          <p class="tagline">Preferiamo hotel con informazioni chiare su posizione, accessibilità, servizi e policy.</p>
+        </article>
+        <article class="card">
+          <h3>2) Coerenza col borgo</h3>
+          <p class="tagline">Una struttura deve “funzionare” con lo stile del borgo (quieto, vivace, mare, vista).</p>
+        </article>
+        <article class="card">
+          <h3>3) Utilità per il viaggiatore</h3>
+          <p class="tagline">Valutiamo ciò che impatta davvero: arrivo, bagagli, parcheggi, scale, distanza dal treno.</p>
+        </article>
+        <article class="card">
+          <h3>4) Numero limitato</h3>
+          <p class="tagline">Massimo 5–10 strutture: meglio poche schede ben fatte che una directory infinita.</p>
+        </article>
+        <article class="card">
+          <h3>5) Aggiornamenti</h3>
+          <p class="tagline">La guida viene rivista periodicamente per evitare informazioni vecchie o poco accurate.</p>
+        </article>
+        <article class="card">
+          <h3>Nota “DEMO”</h3>
+          <p class="tagline">
+            In questa versione le strutture sono esempi dimostrativi. Quando inserisci aziende reali,
+            sostituisci i dati e rimuovi la dicitura “DEMO”.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- HOTEL -->
+    <section id="hotel">
+      <div class="section-title">
+        <h2>Hotel selezionati (DEMO)</h2>
+        <p class="sub">Clicca su una scheda per aprire la pagina dedicata. Qui sotto trovi 6 esempi credibili.</p>
+      </div>
+
+      <div class="grid">
+        <!-- HOTEL 1 -->
+        <article class="card">
+          <div class="hotel-cover" aria-label="Foto hotel demo">
+            <img loading="lazy" alt="Hotel Aurora - Monterosso (DEMO)" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1400&q=70">
+          </div>
+          <div style="margin-top:12px">
+            <h3>Hotel Aurora (DEMO) – Monterosso</h3>
+            <p class="meta">Mare + comfort + logistica semplice</p>
+            <p class="tagline">Adatto a chi vuole spiaggia e servizi, con un’esperienza lineare e senza stress.</p>
+            <div class="badge-row">
+              <span class="badge">Famiglie</span><span class="badge">Vicino al mare</span><span class="badge">Comodo</span>
+            </div>
+            <div class="links">
+              <a href="hotel/hotel-aurora-monterosso.html">Apri scheda</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Sito (placeholder)</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Maps (placeholder)</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- HOTEL 2 -->
+        <article class="card">
+          <div class="hotel-cover">
+            <img loading="lazy" alt="Porto Vista - Vernazza (DEMO)" src="https://images.unsplash.com/photo-1501117716987-c8e1ecb210ff?auto=format&fit=crop&w=1400&q=70">
+          </div>
+          <div style="margin-top:12px">
+            <h3>Porto Vista (DEMO) – Vernazza</h3>
+            <p class="meta">Romantico + vista + centro</p>
+            <p class="tagline">Per coppie: posizione e atmosfera prima di tutto. Valuta accessibilità con bagagli.</p>
+            <div class="badge-row">
+              <span class="badge">Coppie</span><span class="badge">Vista</span><span class="badge">Centro</span>
+            </div>
+            <div class="links">
+              <a href="hotel/porto-vista-vernazza.html">Apri scheda</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Sito (placeholder)</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Maps (placeholder)</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- HOTEL 3 -->
+        <article class="card">
+          <div class="hotel-cover">
+            <img loading="lazy" alt="Terrazza Corniglia - Corniglia (DEMO)" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1400&q=70">
+          </div>
+          <div style="margin-top:12px">
+            <h3>Terrazza Corniglia (DEMO) – Corniglia</h3>
+            <p class="meta">Quiete + panorami + soggiorno lento</p>
+            <p class="tagline">Scelta giusta se vuoi tranquillità e viste: considera pendenze e tempi a piedi.</p>
+            <div class="badge-row">
+              <span class="badge">Quiet</span><span class="badge">Panorama</span><span class="badge">Slow</span>
+            </div>
+            <div class="links">
+              <a href="hotel/terrazza-corniglia.html">Apri scheda</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Sito (placeholder)</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Maps (placeholder)</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- HOTEL 4 -->
+        <article class="card">
+          <div class="hotel-cover">
+            <img loading="lazy" alt="Manarola Boutique - Manarola (DEMO)" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1400&q=70">
+          </div>
+          <div style="margin-top:12px">
+            <h3>Manarola Boutique (DEMO) – Manarola</h3>
+            <p class="meta">Iconico + base comoda + design</p>
+            <p class="tagline">Ottimo per 1–2 notti: “cartolina” e spostamenti rapidi in treno.</p>
+            <div class="badge-row">
+              <span class="badge">Design</span><span class="badge">Breve soggiorno</span><span class="badge">Treno</span>
+            </div>
+            <div class="links">
+              <a href="hotel/manarola-boutique.html">Apri scheda</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Sito (placeholder)</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Maps (placeholder)</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- HOTEL 5 -->
+        <article class="card">
+          <div class="hotel-cover">
+            <img loading="lazy" alt="Riomaggiore Rooms - Riomaggiore (DEMO)" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=70">
+          </div>
+          <div style="margin-top:12px">
+            <h3>Riomaggiore Rooms (DEMO) – Riomaggiore</h3>
+            <p class="meta">Pratico + vivace + base strategica</p>
+            <p class="tagline">Per chi vuole muoversi tanto: check-in semplice, collegamenti comodi, vita serale.</p>
+            <div class="badge-row">
+              <span class="badge">Pratico</span><span class="badge">Base</span><span class="badge">Sera</span>
+            </div>
+            <div class="links">
+              <a href="hotel/riomaggiore-rooms.html">Apri scheda</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Sito (placeholder)</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Maps (placeholder)</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- HOTEL 6 -->
+        <article class="card">
+          <div class="hotel-cover">
+            <img loading="lazy" alt="Sentiero Mare - Monterosso (DEMO)" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1400&q=70">
+          </div>
+          <div style="margin-top:12px">
+            <h3>Sentiero Mare (DEMO) – Monterosso</h3>
+            <p class="meta">Comfort + servizi + soggiorno rilassante</p>
+            <p class="tagline">Per chi vuole relax e una base “facile”, con attenzione a comfort e funzionalità.</p>
+            <div class="badge-row">
+              <span class="badge">Relax</span><span class="badge">Servizi</span><span class="badge">Comfort</span>
+            </div>
+            <div class="links">
+              <a href="hotel/sentiero-mare-monterosso.html">Apri scheda</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Sito (placeholder)</a>
+              <a href="#" rel="nofollow noopener" target="_blank">Maps (placeholder)</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="section-title">
+        <h2>FAQ</h2>
+        <p class="sub">Domande in formato “leggibile” da utenti e AI.</p>
+      </div>
+
+      <details>
+        <summary>Qual è il periodo migliore per dormire alle Cinque Terre?</summary>
+        <p>Maggio, giugno e settembre offrono spesso il miglior equilibrio tra clima, affollamento e disponibilità.</p>
+      </details>
+
+      <details>
+        <summary>Dentro i borghi o fuori?</summary>
+        <p>Dentro è più suggestivo e comodo la sera; fuori spesso è più tranquillo e può costare meno. Dipende dal tuo stile.</p>
+      </details>
+
+      <details>
+        <summary>Quanto anticipo serve per prenotare?</summary>
+        <p>In alta stagione conviene muoversi con largo anticipo. In bassa/media stagione hai più flessibilità.</p>
+      </details>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <strong>Trasparenza:</strong> questa è una guida informativa. In questa versione le strutture sono <strong>DEMO</strong>. Quando inserisci aziende reali,
+      sostituisci dati e link e rimuovi la dicitura “DEMO”.
+    </div>
+  </footer>
 
 </body>
 </html>
-"""
 
-display(HTML(html_code))
