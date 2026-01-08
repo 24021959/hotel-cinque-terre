@@ -1,0 +1,113 @@
+from IPython.display import HTML, display
+
+html_code = """
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Hotel alle Cinque Terre – Guida indipendente</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  color: #1f2937;
+  background: #ffffff;
+  line-height: 1.6;
+}
+header {
+  padding: 60px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+}
+header h1 {
+  max-width: 900px;
+  margin: auto;
+  font-size: 2.4rem;
+}
+header p {
+  max-width: 900px;
+  margin: 20px auto 0;
+  font-size: 1.1rem;
+  color: #4b5563;
+}
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 20px;
+}
+section {
+  margin-bottom: 60px;
+}
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 20px;
+  background: #ffffff;
+}
+.muted {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+footer {
+  background: #f1f5f9;
+  padding: 40px 20px;
+  font-size: 0.9rem;
+  color: #475569;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Dove dormire alle Cinque Terre</h1>
+<p>Guida indipendente agli hotel delle Cinque Terre: borghi, consigli e strutture selezionate.</p>
+</header>
+
+<main>
+
+<section>
+<h2>I borghi delle Cinque Terre</h2>
+<div class="grid">
+<div class="card"><strong>Monterosso</strong><p class="muted">Spiagge e hotel più grandi</p></div>
+<div class="card"><strong>Vernazza</strong><p class="muted">Romantica e panoramica</p></div>
+<div class="card"><strong>Corniglia</strong><p class="muted">Tranquilla e meno affollata</p></div>
+<div class="card"><strong>Manarola</strong><p class="muted">Iconica e fotografata</p></div>
+<div class="card"><strong>Riomaggiore</strong><p class="muted">Vivace e autentica</p></div>
+</div>
+</section>
+
+<section>
+<h2>Hotel selezionati</h2>
+<div class="grid">
+<div class="card">
+<strong>Hotel esempio Monterosso</strong>
+<p>Ideale per soggiorni rilassanti vicino al mare.</p>
+</div>
+<div class="card">
+<strong>Hotel esempio Vernazza</strong>
+<p>Perfetto per coppie e viaggi romantici.</p>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer>
+<p>Sito informativo indipendente.</p>
+</footer>
+
+</body>
+</html>
+"""
+
+display(HTML(html_code))
